@@ -1,0 +1,11 @@
+Id_Curso,codigo,nombre_curso
+1,MAT-01,Matemáticas
+2,FIS-01,Física
+3,HIS-01,Historia
+4,QUI-01,Química
+5,LIT-01,Literatura
+6,BIO-01,Biología
+7,ING-01,Inglés
+8,GEO-01,Geografía
+9,COM-01,Computación
+10,ART-01,Arte

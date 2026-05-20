@@ -1,0 +1,40 @@
+USE colegio_san_martin;
+
+-- 
+-- CONSULTAS DE SEGUIMIENTO ACADÉMICO
+
+-- Consulta 1: Historial de inasistencias ('Falta')
+-- Muestra el estudiante, la fecha y la justificación de la falta.
+SELECT e.nombre, e.apellido, a.fecha, a.justificacion 
+FROM Estudiante e 
+JOIN Inscripcion i ON e.Id_Estudiante = i.Id_Estudiante 
+JOIN Asistencia a ON i.Id_Inscripcion = a.Id_Inscripcion 
+WHERE a.estado = 'Falta';
+
+-- Consulta 2: Catálogo completo de clases planificadas
+-- Muestra el horario junto con el nombre de la asignatura asignada.
+SELECT c.horario, cu.nombre_curso 
+FROM Clase c 
+JOIN Curso cu ON c.Id_Curso = cu.Id_Curso;
+
+-- Consulta 3: Estudiantes con inscripciones activas
+-- Lista los alumnos que están actualmente en estado 'Activo' con sus respectivos horarios.
+SELECT e.nombre, e.apellido, c.horario 
+FROM Estudiante e 
+JOIN Inscripcion i ON e.Id_Estudiante = i.Id_Estudiante 
+JOIN Clase c ON i.Id_Clase = c.Id_Clase 
+WHERE i.estado = 'Activo';
+
+-- Consulta 4: Estudiantes con registro de 'Retraso'
+-- Obtiene los nombres y las fechas en las que los alumnos llegaron tarde.
+SELECT e.nombre, e.apellido, a.fecha 
+FROM Estudiante e 
+JOIN Inscripcion i ON e.Id_Estudiante = i.Id_Estudiante 
+JOIN Asistencia a ON i.Id_Inscripcion = a.Id_Inscripcion 
+WHERE a.estado = 'Retraso';
+
+-- Consulta 5: Horarios de clases y docentes asignados
+-- Asocia directamente los bloques horarios con el profesor responsable de dictarlos.
+SELECT c.horario, p.nombre, p.apellido 
+FROM Clase c 
+JOIN Profesor p ON c.Id_Profesor = p.Id_Profesor;

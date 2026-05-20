@@ -1,0 +1,142 @@
+CREATE DATABASE gestion_Asistencias; 
+
+-- Creación de tablas
+
+CREATE TABLE Profesor (
+    Id_Profesor INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) UNIQUE NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE Curso (
+    Id_Curso INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(50) UNIQUE NOT NULL,
+    nombre_curso VARCHAR(150) NOT NULL
+);
+
+
+CREATE TABLE Estudiante (
+    Id_Estudiante INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    correo VARCHAR(100) UNIQUE NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL
+);
+
+
+
+
+CREATE TABLE Clase (
+    Id_Clase INT PRIMARY KEY AUTO_INCREMENT,
+    horario VARCHAR(100),
+    semestre VARCHAR(50),
+    Id_Profesor INT,
+    Id_Curso INT,
+    FOREIGN KEY (Id_Profesor) REFERENCES Profesor(Id_Profesor) ON DELETE SET NULL,
+    FOREIGN KEY (Id_Curso) REFERENCES Curso(Id_Curso) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Inscripcion (
+    Id_Inscripcion INT PRIMARY KEY AUTO_INCREMENT,
+    estado VARCHAR(50),
+    Fecha DATE,
+    Id_Estudiante INT,
+    Id_Clase INT,
+    FOREIGN KEY (Id_Estudiante) REFERENCES Estudiante(Id_Estudiante) ON DELETE CASCADE,
+    FOREIGN KEY (Id_Clase) REFERENCES Clase(Id_Clase) ON DELETE CASCADE
+);
+
+
+CREATE TABLE Asistencia (
+    Id_Asistencia INT PRIMARY KEY AUTO_INCREMENT,
+    fecha DATE,
+    estado VARCHAR(50),
+    justificacion TEXT,
+    Id_Inscripcion INT NOT NULL,
+    FOREIGN KEY (Id_Inscripcion) REFERENCES Inscripcion(Id_Inscripcion) ON DELETE CASCADE
+);
+
+-- Insercción de Datos
+
+INSERT INTO Estudiante (Id_Estudiante, nombre, apellido, correo, contrasenia) VALUES
+(1, 'Pedro', 'Martínez', 'pedro.martinez@alumno.edu', 'est123'),
+(2, 'Lucía', 'Díaz', 'lucia.diaz@alumno.edu', 'est123'),
+(3, 'Jorge', 'Castro', 'jorge.castro@alumno.edu', 'est123'),
+(4, 'Sofía', 'Vargas', 'sofia.vargas@alumno.edu', 'est123'),
+(5, 'Diego', 'Morales', 'diego.morales@alumno.edu', 'est123'),
+(6, 'Carlos', 'Mendoza', 'carlos.mendoza@alumno.edu', 'est123'),
+(7, 'Ana', 'Silva', 'ana.silva@alumno.edu', 'est123'),
+(8, 'Elena', 'Ríos', 'elena.rios@alumno.edu', 'est123'),
+(9, 'Mario', 'Gómez', 'mario.gomez@alumno.edu', 'est123'),
+(10, 'Laura', 'Acosta', 'laura.acosta@alumno.edu', 'est123');
+
+
+INSERT INTO Profesor (Id_Profesor, nombre, apellido, correo, contrasenia) VALUES
+(1, 'Juan', 'Pérez', 'juan.perez@sanmartin.edu', 'pass123'),
+(2, 'María', 'Gómez', 'maria.gomez@sanmartin.edu', 'pass123'),
+(3, 'Carlos', 'Ruiz', 'carlos.ruiz@sanmartin.edu', 'pass123'),
+(4, 'Ana', 'Torres', 'ana.torres@sanmartin.edu', 'pass123'),
+(5, 'Luis', 'Fernández', 'luis.fernandez@sanmartin.edu', 'pass123'),
+(6, 'Roberto', 'Benítez', 'roberto.benitez@sanmartin.edu', 'pass123'),
+(7, 'Diana', 'Molina', 'diana.molina@sanmartin.edu', 'pass123'),
+(8, 'Ricardo', 'Pérez', 'ricardo.perez@sanmartin.edu', 'pass123'),
+(9, 'Patricia', 'Salgado', 'patricia.salgado@sanmartin.edu', 'pass123'),
+(10, 'Héctor', 'Jiménez', 'hector.jimenez@sanmartin.edu', 'pass123');
+
+
+INSERT INTO Curso (Id_Curso, codigo, nombre_curso) VALUES
+(1, 'MAT-01', 'Matemáticas'),
+(2, 'FIS-01', 'Física'),
+(3, 'HIS-01', 'Historia'),
+(4, 'QUI-01', 'Química'),
+(5, 'LIT-01', 'Literatura'),
+(6, 'BIO-01', 'Biología'),
+(7, 'ING-01', 'Inglés'),
+(8, 'GEO-01', 'Geografía'),
+(9, 'COM-01', 'Computación'),
+(10, 'ART-01', 'Arte');
+
+
+INSERT INTO Clase (Id_Clase, horario, semestre, Id_Profesor, Id_Curso) VALUES
+(1, 'Lunes 08:00 AM', '2026-I', 1, 1),
+(2, 'Martes 10:00 AM', '2026-I', 2, 2),
+(3, 'Miércoles 09:00 AM', '2026-I', 3, 3),
+(4, 'Jueves 11:00 AM', '2026-I', 4, 4),
+(5, 'Viernes 08:00 AM', '2026-I', 5, 5),
+(6, 'Martes 08:00 AM', '2026-I', 1, 1),  
+(7, 'Miércoles 11:00 AM', '2026-I', 8, 9), 
+(8, 'Jueves 08:00 AM', '2026-I', 6, 6),
+(9, 'Lunes 10:00 AM', '2026-I', 7, 7),
+(10, 'Viernes 11:00 AM', '2026-I', 9, 10);
+
+
+INSERT INTO Inscripcion (Id_Inscripcion, estado, Fecha, Id_Estudiante, Id_Clase) VALUES
+(1, 'Activo', '2026-05-01', 1, 1),
+(2, 'Activo', '2026-05-01', 2, 2),
+(3, 'Activo', '2026-05-01', 3, 3),
+(4, 'Activo', '2026-05-01', 4, 4),
+(5, 'Activo', '2026-05-01', 5, 5),
+(6, 'Activo', '2026-05-02', 6, 1),   
+(7, 'Activo', '2026-05-02', 7, 7),   
+(8, 'Inactivo', '2026-05-03', 8, 8), 
+(9, 'Activo', '2026-05-03', 2, 6),   
+(10, 'Activo', '2026-05-04', 9, 9);
+
+
+INSERT INTO Asistencia (Id_Asistencia, fecha, estado, justificacion, Id_Inscripcion) VALUES
+(1, '2026-05-10', 'Presente', NULL, 1),
+(2, '2026-05-10', 'Falta', 'Cita médica', 2), 
+(3, '2026-05-10', 'Retraso', 'Tráfico vehicular', 3),
+(4, '2026-05-10', 'Presente', NULL, 4),
+(5, '2026-05-10', 'Presente', NULL, 5),
+(6, '2026-05-11', 'Presente', NULL, 6),
+(7, '2026-05-11', 'Falta', 'Infección estomacal', 7),
+(8, '2026-05-11', 'Presente', NULL, 9),
+(9, '2026-05-12', 'Falta', 'Calamidad doméstica', 2), 
+(10, '2026-05-11', 'Retraso', 'Problemas de conexión', 10);
+
+

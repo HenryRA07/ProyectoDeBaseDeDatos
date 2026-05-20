@@ -1,0 +1,11 @@
+Id_Inscripcion,estado,Fecha,Id_Estudiante,Id_Clase
+1,Activo,2026-05-01,1,1
+2,Activo,2026-05-01,2,2
+3,Activo,2026-05-01,3,3
+4,Activo,2026-05-01,4,4
+5,Activo,2026-05-01,5,5
+6,Activo,2026-05-02,6,1
+7,Activo,2026-05-02,7,7
+8,Inactivo,2026-05-03,8,8
+9,Activo,2026-05-03,2,6
+10,Activo,2026-05-04,9,9

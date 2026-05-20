@@ -1,0 +1,11 @@
+Id_Clase,horario,semestre,Id_Profesor,Id_Curso
+1,Lunes 08:00 AM,2026-I,1,1
+2,Martes 10:00 AM,2026-I,2,2
+3,Miércoles 09:00 AM,2026-I,3,3
+4,Jueves 11:00 AM,2026-I,4,4
+5,Viernes 08:00 AM,2026-I,5,5
+6,Martes 08:00 AM,2026-I,1,1
+7,Miércoles 11:00 AM,2026-I,8,9
+8,Jueves 08:00 AM,2026-I,6,6
+9,Lunes 10:00 AM,2026-I,7,7
+10,Viernes 11:00 AM,2026-I,9,10
