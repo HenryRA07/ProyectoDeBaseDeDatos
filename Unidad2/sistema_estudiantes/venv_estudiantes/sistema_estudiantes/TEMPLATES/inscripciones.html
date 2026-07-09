@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscribir estudiante en clase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f1e;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a3a52 0%, #0d1f2d 100%);
+            padding: 20px 0;
+            border-bottom: 3px solid #0084d4;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0084d4;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .logo span { color: #ffffff; }
+        
+        .nav-admin a {
+            color: #0084d4; text-decoration: none; font-weight: 600;
+            padding: 8px 16px; border-radius: 4px; border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-admin a:hover {
+            background: rgba(0,132,212,0.1);
+            border-color: #0084d4;
+        }
+        
+        main { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+        
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .info-section h2 { font-size: 42px; color: #fff; margin-bottom: 20px; }
+        
+        .info-section h2 .highlight { color: #0084d4; }
+        
+        .info-section p { color: #a0a0a0; line-height: 1.8; margin-bottom: 20px; }
+        
+        .form-card {
+            background: linear-gradient(135deg, #1a2d3f 0%, #0d1f2d 100%);
+            border: 1px solid rgba(0,132,212,0.2);
+            border-radius: 12px; padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        
+        .form-card h3 { font-size: 24px; color: #fff; margin-bottom: 10px; }
+        
+        .form-subtitle { color: #808080; font-size: 14px; margin-bottom: 30px; }
+        
+        .messages { margin-bottom: 25px; }
+        
+        .messages ul { list-style: none; }
+        
+        .messages li {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px; font-size: 14px;
+            border-left: 4px solid;
+        }
+
+        .messages li.success {
+            background: rgba(40,167,69,0.15);
+            color: #5fd38e;
+            border-color: #28a745;
+        }
+
+        .messages li.error {
+            background: rgba(220,53,69,0.15);
+            color: #ff6b6b;
+            border-color: #dc3545;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+        
+        .form-group { display: flex; flex-direction: column; gap: 10px; }
+        
+        label { font-weight: 600; color: #fff; font-size: 14px; }
+        
+        select, input[type="date"] {
+            padding: 14px;
+            border: 2px solid rgba(0,132,212,0.3);
+            border-radius: 8px; font-size: 14px; font-family: inherit;
+            background: rgba(30,40,55,0.8); color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input[type="date"]:focus {
+            outline: none; border-color: #0084d4;
+            box-shadow: 0 0 0 4px rgba(0,132,212,0.15);
+        }
+        
+        button {
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #0084d4 0%, #003d82 100%);
+            color: white; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
+        }
+        
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,132,212,0.4); }
+        
+        footer {
+            background: linear-gradient(135deg, #0d1f2d 0%, #0a1520 100%);
+            border-top: 1px solid rgba(0,132,212,0.2);
+            padding: 30px 0; text-align: center; color: #808080;
+        }
+        
+        @media (max-width: 1024px) {
+            .content-wrapper { grid-template-columns: 1fr; }
+            .info-section h2 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">SYS<span>ESTUDIANTES</span></div>
+            <nav class="nav-admin">
+                <a href="/">← Volver a Inicio</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="content-wrapper">
+            <section class="info-section">
+                <h2>Inscribir <span class="highlight">Estudiantes</span> en Clases</h2>
+                <p>Registra estudiantes en las clases disponibles. Los datos de las clases se obtienen del Web Service del Sistema de Clases.</p>
+            </section>
+
+            <section>
+                <div class="form-card">
+                    <h3>Nueva Inscripción</h3>
+                    <p class="form-subtitle">Completa los campos para registrar un estudiante</p>
+
+                    {% if messages %}
+                        <div class="messages">
+                            <ul>
+                                {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_estudiante">Estudiante</label>
+                            <select name="id_estudiante" id="id_estudiante" required>
+                                <option value="">-- Seleccionar estudiante --</option>
+                                {% for estudiante in estudiantes %}
+                                    <option value="{{ estudiante.id_estudiante }}">
+                                        {{ estudiante.nombre }} {{ estudiante.apellido }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_clase">Clase</label>
+                            <select name="id_clase" id="id_clase" required>
+                                <option value="">-- Seleccionar clase --</option>
+                                {% for clase in clases %}
+                                    <option value="{{ clase.id_clase }}">
+                                        {{ clase.horario }} — {{ clase.nombre_curso }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <select name="estado" id="estado">
+                                <option value="Activo">✓ Activo</option>
+                                <option value="Inactivo">✗ Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fecha">Fecha de Inscripción</label>
+                            <input type="date" name="fecha" id="fecha">
+                        </div>
+
+                        <button type="submit">Inscribir Estudiante</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2024 Sistema de Estudiantes. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
