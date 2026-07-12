@@ -1,45 +1,62 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
-from django.db import models
+from djongo import models
 
-
+# 1. Estructura Abstracta para Asistencia (Se embeberá como un array de objetos)
 class Asistencia(models.Model):
-    id_asistencia = models.AutoField(primary_key=True)
     fecha = models.DateField(blank=True, null=True)
     estado = models.CharField(max_length=50, blank=True, null=True)
     justificacion = models.TextField(blank=True, null=True)
-    id_inscripcion = models.ForeignKey('Inscripcion', models.DO_NOTHING, db_column='id_inscripcion')
 
     class Meta:
-        managed = False
-        db_table = 'asistencia'
+        abstract = True  # Evita que Djongo cree una colección independiente
 
+# 2. Estructura Abstracta para desnormalizar datos desde el Web Service de la App 1
+class ClaseInfo(models.Model):
+    nombre_curso = models.CharField(max_length=100, blank=True, null=True)
+    codigo_curso = models.CharField(max_length=50, blank=True, null=True)
+    horario = models.CharField(max_length=100, blank=True, null=True)
+    semestre = models.CharField(max_length=50, blank=True, null=True)
+    profesor = models.CharField(max_length=100, blank=True, null=True)
 
+    class Meta:
+        abstract = True
+
+# 3. Modelo de Estudiante (Colección independiente)
 class Estudiante(models.Model):
-    id_estudiante = models.AutoField(primary_key=True)
+    # Usamos IntegerField para conservar exactamente los mismos IDs numéricos que ya tienes en Postgres
+    id_estudiante = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     correo = models.CharField(unique=True, max_length=100)
     contrasenia = models.CharField(max_length=255)
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+    activo = models.BooleanField(default=True)
 
-    class Meta:
-        managed = False
-        db_table = 'estudiante'
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
 
-
-
+# 4. Modelo de Inscripción (Documento raíz NoSQL con todo embebido)
 class Inscripcion(models.Model):
-    id_inscripcion = models.AutoField(primary_key=True)
-    estado = models.CharField(max_length=50, blank=True, null=True)
-    fecha = models.DateField(blank=True, null=True)
-    id_estudiante = models.IntegerField(blank=True, null=True)
-    id_clase = models.IntegerField(blank=True, null=True)
+    id_inscripcion = models.IntegerField(primary_key=True) # Conserva el ID de Postgres
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE)
+    id_clase_externo = models.IntegerField(blank=True, null=True)  # Equivale a id_clase de Postgres
+    estado = models.CharField(max_length=50, blank=True, null=True, default='Activo')
+    fecha_inscripcion = models.DateField(blank=True, null=True)     # Equivale a fecha de Postgres
 
-    class Meta:
-        managed = False
-        db_table = 'inscripcion'
+    # El array embebido NoSQL que guardará la lista de asistencias del alumno
+    asistencias = models.ArrayField(
+        model_container=Asistencia,
+        blank=True,
+        default=list
+    )
+    
+    # El subdocumento embebido para almacenar la respuesta del Web Service posterior
+    clase_info = models.EmbeddedField(
+        model_container=ClaseInfo,
+        blank=True,
+        null=True
+    )
+    
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Inscripción {self.id_inscripcion} - Estudiante: {self.estudiante.apellido}"

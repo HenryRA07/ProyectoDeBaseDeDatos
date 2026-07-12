@@ -1,24 +1,17 @@
 from django.contrib import admin
-from .models import Estudiante, Inscripcion, Asistencia
+from .models import Estudiante, Inscripcion
 
-# ---------- Estudiante ----------
+@admin.register(Estudiante)
 class EstudianteAdmin(admin.ModelAdmin):
-    list_display = ('id_estudiante', 'nombre', 'apellido', 'correo')
+    list_display = ('id_estudiante', 'nombre', 'apellido', 'correo', 'activo')
     search_fields = ('nombre', 'apellido', 'correo')
+    list_filter = ('activo',)
 
-# ---------- Inscripcion ----------
+@admin.register(Inscripcion)
 class InscripcionAdmin(admin.ModelAdmin):
-    list_display = ('id_inscripcion', 'estado', 'fecha', 'id_estudiante', 'id_clase')
-    search_fields = ('estado',)
-    list_filter = ('estado', 'fecha')
-
-# ---------- Asistencia ----------
-class AsistenciaAdmin(admin.ModelAdmin):
-    list_display = ('id_asistencia', 'fecha', 'estado', 'justificacion', 'id_inscripcion')
-    search_fields = ('estado', 'justificacion')
-    list_filter = ('estado', 'fecha')
-
-# Registrar todos los modelos
-admin.site.register(Estudiante, EstudianteAdmin)
-admin.site.register(Inscripcion, InscripcionAdmin)
-admin.site.register(Asistencia, AsistenciaAdmin)
+    list_display = ('id_inscripcion', 'estudiante', 'id_clase_externo', 'estado', 'fecha_inscripcion')
+    search_fields = ('id_inscripcion', 'estudiante__apellido', 'estado')
+    list_filter = ('estado',)
+    
+    # Nota: Las asistencias al estar embebidas como un Array NoSQL se renderizarán 
+    # de forma automática dentro del formulario de edición de cada Inscripción.

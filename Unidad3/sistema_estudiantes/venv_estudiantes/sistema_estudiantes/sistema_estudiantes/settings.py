@@ -74,17 +74,31 @@ WSGI_APPLICATION = 'sistema_estudiantes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'bd_estudiantes',              
+#         'USER': 'henry_estudiantes',           
+#         'PASSWORD': '123456',           
+#         'HOST': 'localhost',
+#         'PORT': '5432',                       
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bd_estudiantes',              
-        'USER': 'henry_estudiantes',           
-        'PASSWORD': '123456',           
-        'HOST': 'localhost',
-        'PORT': '5432',                       
+        'ENGINE': 'djongo',
+        'NAME': 'bd_estudiantes',  # El nombre de tu base de datos en MongoDB
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb://localhost:27017',  # Tu servidor local de MongoDB
+            # Si tu MongoDB tuviera usuario y contraseña (opcional), se pondrían aquí:
+            # 'username': 'tu_usuario',
+            # 'password': 'tu_contraseña',
+            # 'authMechanism': 'SCRAM-SHA-1',
+        }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
